@@ -1,4 +1,4 @@
-using Zygote, Flux, BenchmarkTools, Plots
+using Zygote, Flux, BenchmarkTools, Plots, Test
 
 function build_model(num_layers::Int, size::Int)
     layers = Any[]
@@ -9,12 +9,12 @@ function build_model(num_layers::Int, size::Int)
 end
 
 timings = Dict()
-layers = 1:4
-seq_lens = 1:50
+layers = 1:5
+seq_lens = 1:20
 for num_layers in layers
     timings[num_layers] = Any[]
     for seq_len in seq_lens
-        size = 10
+        size = 4
         model = build_model(num_layers, size)
         x = randn(size)
         y, back = Zygote.forward(m -> begin
@@ -28,6 +28,15 @@ for num_layers in layers
         @info num_layers, seq_len, size, timings[num_layers][end]
     end
 end
+
+using DataFrames, GLM, Statistics
+overhead_estimates = Float64[]
+for num_layers in layers
+    data = DataFrame(X=[minimum(t).time for t in timings[num_layers]], Y=seq_lens)
+    ols = lm(@formula(Y ~ X), data)
+    push!(overhead_estimates, coeftable(ols).cols[1][1])
+end
+println("Mean overhead: $(mean(overhead_estimates))ns")
 
 gr()
 ENV["GKSwstype"]="100"
