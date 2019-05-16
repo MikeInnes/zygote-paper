@@ -40,7 +40,7 @@ data = [RGB(0.5, 0.0, 0.0), RGB(0.6, 0.0, 0.0), RGB(0.4, 0.0, 0.0)]
 function logπ(θ::Vector{Float64}) :: Float64
     c = RGB(θ...)
     logprior = logpdf(UniformRGB(), c)
-    loglikelihood = sum([logpdf(NormalRGB(t, 10.0), c) for t in data])
+    loglikelihood = sum([logpdf(NormalRGB(t, 5.0), c) for t in data])
     return logprior + loglikelihood
 end
 ∂logπ∂θ(θ::Vector{Float64}) :: Vector{Float64} = collect(gradient(logπ, θ)[1])
@@ -55,7 +55,7 @@ n_samples = 1_000
 # Define metric space, Hamiltonian and sampling method
 metric = UnitEuclideanMetric(D)
 h = Hamiltonian(metric, logπ, ∂logπ∂θ)
-prop = NUTS(Leapfrog(find_good_eps(h, θ_init)))
+prop = NUTS(Leapfrog(find_good_eps(h, θ_init)), 5, 1000.0)
 adaptor = StanNUTSAdaptor(n_adapts, Preconditioner(metric), NesterovDualAveraging(0.8, prop.integrator.ϵ))
 
 # Sampling
