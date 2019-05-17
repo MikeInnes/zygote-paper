@@ -20,14 +20,14 @@ function sweep_batchsizes(batch_sizes, num_layers = 1, seq_len = 4, feature_size
     for batch_size in batch_sizes
         model = build_model(num_layers, feature_size)
         x = SMatrix{feature_size,batch_size}(randn(feature_size, batch_size))
-        y, back = Zygote.forward(m -> begin
+        test(m, x) = gradient(m, x) do m, x
             x_t = x
             for idx in 1:seq_len
                 x_t = m(x_t)
             end
             return sum(x_t)
-        end, model)
-        push!(timings, minimum(@benchmark $back(1f0)).time/(seq_len*num_layers))
+        end
+        push!(timings, minimum(@benchmark $test($model, $x)).time/(seq_len*num_layers))
         @info num_layers, seq_len, feature_size, batch_size, timings[end]
     end
     return timings
