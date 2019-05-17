@@ -1,12 +1,17 @@
-using Zygote, Flux, BenchmarkTools, Test, DataFrames, GLM, Statistics
+using Zygote, Flux, BenchmarkTools, Test, DataFrames, GLM, Statistics, StaticArrays
 using Plots
+
+to_smatrix(x) = x
+function to_smatrix(x::Matrix)
+    return SMatrix{size(x)...}(x)
+end
 
 function build_model(num_layers::Int, size::Int)
     layers = Any[]
     for layer_idx in 1:num_layers
         push!(layers, LSTM(size, size))
     end
-    return mapleaves(Flux.data, Chain(layers...))
+    return mapleaves(to_smatrix, mapleaves(Flux.data, Chain(layers...)))
 end
 
 @info "Reporting (num_layers, seq_len, feature_size, batch_size, time)"
@@ -14,7 +19,7 @@ function sweep_batchsizes(batch_sizes, num_layers = 1, seq_len = 4, feature_size
     timings = Float64[]
     for batch_size in batch_sizes
         model = build_model(num_layers, feature_size)
-        x = randn(feature_size, batch_size)
+        x = SMatrix{feature_size,batch_size}(randn(feature_size, batch_size))
         y, back = Zygote.forward(m -> begin
             x_t = x
             for idx in 1:seq_len
