@@ -131,9 +131,9 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[Distributions]]
 deps = ["LinearAlgebra", "PDMats", "Printf", "QuadGK", "Random", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns"]
-git-tree-sha1 = "56a158bc0abe4af5d4027af2275fde484261ca6d"
+git-tree-sha1 = "4ae0ff1a3a556383f7b1b004f5fb964b26ac96c9"
 uuid = "31c24e10-a181-5473-b8eb-7969acd0382f"
-version = "0.19.2"
+version = "0.20.0"
 
 [[FixedPointNumbers]]
 deps = ["Test"]
@@ -177,7 +177,9 @@ version = "0.7.3"
 
 [[IRTools]]
 deps = ["InteractiveUtils", "MacroTools", "Test"]
-git-tree-sha1 = "42b54182e1764f908636157353825707c1aab764"
+git-tree-sha1 = "093da631b6f3bc131219afd0fa88cdf9a28c101a"
+repo-rev = "master"
+repo-url = "https://github.com/MikeInnes/IRTools.jl.git"
 uuid = "7869d1d1-7146-5819-86e3-90919afe41df"
 version = "0.2.1"
 
@@ -313,10 +315,10 @@ deps = ["Printf"]
 uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[QuadGK]]
-deps = ["DataStructures", "LinearAlgebra", "Test"]
-git-tree-sha1 = "3ce467a8e76c6030d4c3786e7d3a73442017cdc0"
+deps = ["DataStructures", "LinearAlgebra"]
+git-tree-sha1 = "389fd27b958a33df5234772cc464b663b208273d"
 uuid = "1fd47b50-473d-5c70-9696-f719f8f3bcdc"
-version = "2.0.3"
+version = "2.0.4"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
@@ -414,7 +416,7 @@ uuid = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
 version = "0.5.0"
 
 [[SuiteSparse]]
-deps = ["Libdl", "LinearAlgebra", "SparseArrays"]
+deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
 uuid = "4607b0f0-06f3-5cda-b6b1-a6196a1729e9"
 
 [[TableTraits]]
@@ -447,9 +449,9 @@ version = "0.5.3"
 
 [[Tracker]]
 deps = ["Adapt", "DiffRules", "ForwardDiff", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Printf", "Random", "Requires", "SpecialFunctions", "Statistics", "Test"]
-git-tree-sha1 = "635c47e3afc470c5cc58021fe489d663ef3182ed"
+git-tree-sha1 = "327342fec6e09f68ced0c2dc5731ed475e4b696b"
 uuid = "9f7883ad-71c0-57eb-9f7f-b5c9e6d3789c"
-version = "0.2.1"
+version = "0.2.2"
 
 [[TranscodingStreams]]
 deps = ["Random", "Test"]
@@ -478,6 +480,8 @@ version = "0.8.1"
 
 [[Zygote]]
 deps = ["DiffRules", "ForwardDiff", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics"]
-git-tree-sha1 = "40aa7d4724b3ab508f6200a885b6e92cc6647f14"
+git-tree-sha1 = "685341cbb01a3b303c8ba6429b29d4c7879f3d07"
+repo-rev = "master"
+repo-url = "https://github.com/FluxML/Zygote.jl.git"
 uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
 version = "0.3.1"
