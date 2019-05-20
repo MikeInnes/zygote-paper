@@ -1,0 +1,7 @@
+[deps]
+BitBasis = "50ba71b6-fa0f-514d-ae9a-0916efc90dcf"
+LuxurySparse = "d05aeea4-b7d4-55ac-b691-9e7fabb07ba2"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+Yao = "5872b779-8223-5990-8dd0-5abbb0748c8c"
+YaoBase = "a8f54c17-34bc-5a9d-b050-f522fe3f755f"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
