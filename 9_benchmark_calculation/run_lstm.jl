@@ -55,7 +55,7 @@ println("Mean overhead: $(mean(values(overhead_estimates)))ns")
 gr()
 ENV["GKSwstype"]="100"
 p = plot()
-for key in keys(timings)
+for key in sort(collect(keys(timings)))
     num_layers, seq_len, feature_size, batch_sizes = key
     plot!(p, batch_sizes, timings[key]; title="LSTM Runtime", ylabel="Runtime (ns)", xlabel="Batch Size", label="$(num_layers) layers")
 end
