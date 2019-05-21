@@ -27,7 +27,7 @@ function sweep_batchsizes(batch_sizes, num_layers = 1, seq_len = 4, feature_size
             end
             return sum(x_t)
         end
-        push!(timings, minimum(@benchmark $test($model, $x)).time/(seq_len*num_layers))
+        push!(timings, minimum(@benchmark $test($model, $x)).time)
         @info num_layers, seq_len, feature_size, batch_size, timings[end]
     end
     return timings
@@ -45,9 +45,10 @@ end
 
 overhead_estimates = Dict()
 for k in keys(timings)
+    num_layers, seq_len, feature_size, batch_sizes = k
     data = DataFrame(X=batch_sizes, Y=timings[k])
     ols = lm(@formula(Y ~ X), data)
-    overhead_estimates[k] = coeftable(ols).cols[1][1]
+    overhead_estimates[k] = coeftable(ols).cols[1][1]/(num_layers * seq_len)
 end
 @show overhead_estimates
 println("Mean overhead: $(mean(values(overhead_estimates)))ns")
