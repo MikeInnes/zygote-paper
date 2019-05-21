@@ -34,11 +34,11 @@ function sweep_batchsizes(batch_sizes, num_layers = 1, seq_len = 4, feature_size
 end
 
 
-batch_sizes = 1:4
+batch_sizes = 1:8
 timings = Dict()
 for num_layers in 1:3,
-    seq_len in (4, 8),
-    feature_size in (4, 8)
+    seq_len in (4,),
+    feature_size in (4,)
 
     timings[(num_layers, seq_len, feature_size, batch_sizes)] = sweep_batchsizes(batch_sizes, num_layers, seq_len, feature_size)
 end
@@ -52,10 +52,11 @@ end
 @show overhead_estimates
 println("Mean overhead: $(mean(values(overhead_estimates)))ns")
 
-#gr()
-#ENV["GKSwstype"]="100"
-#p = plot()
-#for num_layers in layers
-#    plot!(p, seq_lens, [minimum(t).time for t in timings[num_layers]]; title="LSTM Runtime", ylabel="Runtime (μs)", xlabel="Sequence Length", label="$(num_layers) layers")
-#end
-#savefig(p, joinpath(@__DIR__, "lstm_runtime.png"))
+gr()
+ENV["GKSwstype"]="100"
+p = plot()
+for key in keys(timings)
+    num_layers, seq_len, feature_size, batch_sizes = key
+    plot!(p, batch_sizes, timings[key]; title="LSTM Runtime", ylabel="Runtime (ns)", xlabel="Batch Size", label="$(num_layers) layers")
+end
+savefig(p, joinpath(@__DIR__, "lstm_runtime.png"))
