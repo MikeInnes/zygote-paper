@@ -1,4 +1,4 @@
-using Zygote, MacroTools
+using Zygote, MacroTools, InteractiveUtils
 
 # This script shows off a simple `einsum` macro, similar to that in numpy,
 # PyTorch or TensorFlow.
