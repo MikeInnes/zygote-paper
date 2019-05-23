@@ -28,6 +28,18 @@ ps = Flux.params(dudt)
 n_sde = x->neural_dmsde(dudt,x,mp,tspan,SOSRI(),saveat=t,reltol=1e-1,abstol=1e-1)
 
 pred = n_sde(u0) # Get the prediction using the correct initial condition
+
+dudt_(u,p,t) = Flux.data(dudt(u))
+g(u,p,t) = mp.*u
+nprob = SDEProblem(dudt_,g,u0,(0.0f0,1.2f0),nothing)
+
+monte_nprob = MonteCarloProblem(nprob)
+monte_nsol = solve(monte_nprob,SOSRI(),num_monte = 100)
+monte_nsum = MonteCarloSummary(monte_nsol)
+#plot(monte_nsol,color=1,alpha=0.3)
+p1 = plot(monte_nsum, title = "Neural SDE: Before Training")
+scatter!(p1,t,sde_data',lw=3)
+
 scatter(t,sde_data[1,:],label="data")
 scatter!(t,Flux.data(pred[1,:]),label="prediction")
 
@@ -55,7 +67,7 @@ end
 cb()
 
 Flux.train!(loss_n_sde1 , ps, Iterators.repeated((), 100), opt, cb = cb)
-Flux.train!(loss_n_sde10, ps, Iterators.repeated((), 5), opt, cb = cb)
+Flux.train!(loss_n_sde10, ps, Iterators.repeated((), 20), opt, cb = cb)
 
 dudt_(u,p,t) = Flux.data(dudt(u))
 g(u,p,t) = mp.*u
@@ -64,8 +76,11 @@ nprob = SDEProblem(dudt_,g,u0,(0.0f0,1.2f0),nothing)
 monte_nprob = MonteCarloProblem(nprob)
 monte_nsol = solve(monte_nprob,SOSRI(),num_monte = 100)
 monte_nsum = MonteCarloSummary(monte_nsol)
-plot(monte_nsol,color=1,alpha=0.3)
-plot(monte_nsum)
-plot!(t,sde_data',lw=3)
+#plot(monte_nsol,color=1,alpha=0.3)
+p2 = plot(monte_nsum, title = "Neural SDE: After Training", xlabel="Time")
+scatter!(p2,t,sde_data',lw=3,label=["x" "y" "z" "y"])
+
+plot(p1,p2,layout=(2,1))
+
 savefig("neural_sde.pdf")
 savefig("neural_sde.png")
