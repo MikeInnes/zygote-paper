@@ -816,7 +816,7 @@ uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
 version = "0.3.1"
 
 [[RayTracer]]
-deps = ["Flux", "IRTools", "Images", "Zygote"]
+deps = ["Flux", "IRTools", "Images", "PartialP"]
 git-tree-sha1 = "7068b8e3a4f6c12ac92878def9ef9ee1696f5c55"
 repo-rev = "ap/differentiable"
 repo-url = "https://github.com/avik-pal/RayTracer.jl"
@@ -1099,10 +1099,10 @@ git-tree-sha1 = "5f6f663890dfb9bad6af75a86a43f67904e5050e"
 uuid = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 version = "0.8.1"
 
-[[Zygote]]
+[[PartialP]]
 deps = ["DiffRules", "ForwardDiff", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics"]
 git-tree-sha1 = "685341cbb01a3b303c8ba6429b29d4c7879f3d07"
 repo-rev = "master"
-repo-url = "https://github.com/FluxML/Zygote.jl.git"
+repo-url = "https://github.com/staticfloat/PartialP.jl.git"
 uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
 version = "0.3.1"

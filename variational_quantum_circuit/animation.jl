@@ -1,4 +1,4 @@
-using Yao, Zygote, Flux.Optimise
+using Yao, PartialP, Flux.Optimise
 include("patch.jl")
 
 t = ArrayReg(bit"0") + ArrayReg(bit"1")

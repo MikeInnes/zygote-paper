@@ -1,4 +1,4 @@
-using Flux, Gym, Printf, Zygote
+using Flux, Gym, Printf, PartialP
 using Flux.Tracker: data
 using Flux.Optimise: update!
 using Statistics: mean

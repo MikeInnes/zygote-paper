@@ -1,7 +1,7 @@
 using LinearAlgebra
 BLAS.set_num_threads(1)
 
-using Zygote, Flux, BenchmarkTools, Test, DataFrames, GLM, Statistics, StaticArrays
+using PartialP, Flux, BenchmarkTools, Test, DataFrames, GLM, Statistics, StaticArrays
 using Plots
 
 to_smatrix(x) = x

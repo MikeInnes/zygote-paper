@@ -1,4 +1,4 @@
-using RayTracer, Zygote, Flux, Images, Statistics
+using RayTracer, PartialP, Flux, Images, Statistics
 
 mkdir("images")
 

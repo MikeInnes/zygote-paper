@@ -1,4 +1,4 @@
-using Yao, Zygote, Flux.Optimise
+using Yao, PartialP, Flux.Optimise
 include("patch.jl")
 
 # make a one qubit GHZ state as learning target
@@ -13,7 +13,7 @@ function fid(xs)
     return abs(statevec(t)' * U * statevec(r))
 end
 
-# simply tell Zygote to get the gradient and start training
+# simply tell PartialP to get the gradient and start training
 function train()
     opt = ADAM()
     xs = rand(2)

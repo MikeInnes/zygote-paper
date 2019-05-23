@@ -183,7 +183,7 @@ uuid = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
 version = "0.6.0"
 
 [[Flux]]
-deps = ["AbstractTrees", "Adapt", "CodecZlib", "Colors", "DelimitedFiles", "Juno", "LinearAlgebra", "MacroTools", "NNlib", "Pkg", "Printf", "Random", "Reexport", "Requires", "SHA", "Statistics", "StatsBase", "Test", "Tracker", "ZipFile", "Zygote"]
+deps = ["AbstractTrees", "Adapt", "CodecZlib", "Colors", "DelimitedFiles", "Juno", "LinearAlgebra", "MacroTools", "NNlib", "Pkg", "Printf", "Random", "Reexport", "Requires", "SHA", "Statistics", "StatsBase", "Test", "Tracker", "ZipFile", "PartialP"]
 git-tree-sha1 = "6d6c351fd7465cf09e2f16a72865d17d5ad89265"
 repo-rev = "sf/zygote_updated"
 repo-url = "https://github.com/FluxML/Flux.jl.git"
@@ -417,7 +417,7 @@ uuid = "c84ed2f1-dad5-54f0-aa8e-dbefe2724439"
 version = "0.3.1"
 
 [[RayTracer]]
-deps = ["Flux", "Images", "Zygote"]
+deps = ["Flux", "Images", "PartialP"]
 git-tree-sha1 = "1480a7b7ead9a2e75a2219040d7b114112a66e1c"
 repo-rev = "ap/differentiable"
 repo-url = "https://github.com/avik-pal/RayTracer.jl"
@@ -558,11 +558,11 @@ git-tree-sha1 = "5f6f663890dfb9bad6af75a86a43f67904e5050e"
 uuid = "a5390f91-8eb1-5f08-bee0-b1d1ffed6cea"
 version = "0.8.1"
 
-[[Zygote]]
+[[PartialP]]
 deps = ["DiffRules", "ForwardDiff", "IRTools", "InteractiveUtils", "LinearAlgebra", "MacroTools", "NNlib", "NaNMath", "Random", "Requires", "SpecialFunctions", "Statistics"]
 git-tree-sha1 = "90b1b474945674ec371f4fd8cb43de6297c6280c"
 repo-rev = "a2efc32d155037390b35160c786a779ac4bd42e7"
-repo-url = "https://github.com/FluxML/Zygote.jl.git"
+repo-url = "https://github.com/staticfloat/PartialP.jl.git"
 uuid = "e88e6eb3-aa80-5325-afca-941959d7151f"
 version = "0.3.1"
 

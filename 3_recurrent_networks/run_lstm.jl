@@ -1,4 +1,4 @@
-using Zygote, Flux, NNlib, Random
+using PartialP, Flux, NNlib, Random
 using Flux: onehot, chunk, batchseq, crossentropy
 using Base.Iterators: partition
 using StatsBase: wsample
@@ -18,7 +18,7 @@ function train_model!(model, Xs, Ys, num_epochs = 100)
             x_batch, y_batch = Xs[permutation[batch_idx]], Ys[permutation[batch_idx]]
             # Calculate gradients upon the model for this batch of data,
             # summing crossentropy loss across time
-            l, back = Zygote.forward(model) do model
+            l, back = PartialP.forward(model) do model
 				return sum(crossentropy.(model.(x_batch), y_batch))
 			end
             grads = back(1f0)[1]

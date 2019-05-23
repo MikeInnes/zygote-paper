@@ -1,6 +1,6 @@
 # Variational Quantum Eigensolver
 
-This folder contains a **proof of concept** demonstration of the classical simulation of variational quantum eigensolver algorithm with [Zygote](https://github.com/FluxML/Zygote.jl) enhanced quantum circuit simulator [Yao.jl](https://github.com/QuantumBFS/Yao.jl).
+This folder contains a **proof of concept** demonstration of the classical simulation of variational quantum eigensolver algorithm with [PartialP](https://github.com/staticfloat/PartialP.jl) enhanced quantum circuit simulator [Yao.jl](https://github.com/QuantumBFS/Yao.jl).
 
 ## Related Work
 
@@ -26,7 +26,7 @@ The VQE algorithm can be summarized as the following diagram
 
 <img src="vqe-bp.png" width="700"/>
 
-FIG. 1. A schetch of VQE algorithm, boxes are objectives and lines indicates data flow. (a) the quantum algorithm, (b) the classical simulation approach with Zygote, where the blue is the backward pass, which is done silently.
+FIG. 1. A schetch of VQE algorithm, boxes are objectives and lines indicates data flow. (a) the quantum algorithm, (b) the classical simulation approach with PartialP, where the blue is the backward pass, which is done silently.
 
 In this scheme, a parameterized quantum circuit provides a variational ansatz for the ground state. A classical optimizer tunes the circuit parameters to reduce the expected energy of the target Hamiltonian of the output quantum state. 
 

@@ -1,5 +1,5 @@
-using Flux, Gym, Printf, Zygote
-using Zygote: @adjoint
+using Flux, Gym, Printf, PartialP
+using PartialP: @adjoint
 using Flux.Optimise: update!
 using Statistics: mean
 #using CuArrays

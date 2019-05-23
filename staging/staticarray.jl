@@ -1,4 +1,4 @@
-using Zygote, StaticArrays, InteractiveUtils
+using PartialP, StaticArrays, InteractiveUtils
 
 # Naive Matrix Multiply
 

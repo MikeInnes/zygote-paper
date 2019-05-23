@@ -1,5 +1,5 @@
 using Flux, Trebuchet
-using Zygote: forwarddiff
+using PartialP: forwarddiff
 using Statistics: mean
 using Random
 

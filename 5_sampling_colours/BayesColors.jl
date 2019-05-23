@@ -1,4 +1,4 @@
-using Colors, Distributions, AdvancedHMC, Zygote
+using Colors, Distributions, AdvancedHMC, PartialP
 
 #############
 # Utilities #

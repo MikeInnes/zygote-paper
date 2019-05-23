@@ -1,7 +1,7 @@
-using Zygote
-using Zygote: gradient, @adjoint
-using Zygote, LuxurySparse, Yao, YaoBase, SparseArrays, BitBasis
-import Zygote: Context
+using PartialP
+using PartialP: gradient, @adjoint
+using PartialP, LuxurySparse, Yao, YaoBase, SparseArrays, BitBasis
+import PartialP: Context
 
 using Yao
 using YaoBlocks: ConstGate
@@ -12,21 +12,21 @@ using BitBasis: controller, controldo
 using TupleTools
 
 
-Zygote.@adjoint (::Type{T})(perms, vals) where T <: PermMatrix = T(perms, vals), Δ -> nothing
-Zygote.@adjoint (::Type{T})() where T <: IMatrix = T(), Δ -> nothing
-Zygote.@adjoint Base.:(*)(A::Number, B::PermMatrix) = A * B, Δ->(sum(Δ .* B), A * Δ)
-Zygote.@adjoint Base.:(*)(A::PermMatrix, B::Number) = A * B, Δ->(A * Δ, sum(Δ .* B))
+PartialP.@adjoint (::Type{T})(perms, vals) where T <: PermMatrix = T(perms, vals), Δ -> nothing
+PartialP.@adjoint (::Type{T})() where T <: IMatrix = T(), Δ -> nothing
+PartialP.@adjoint Base.:(*)(A::Number, B::PermMatrix) = A * B, Δ->(sum(Δ .* B), A * Δ)
+PartialP.@adjoint Base.:(*)(A::PermMatrix, B::Number) = A * B, Δ->(A * Δ, sum(Δ .* B))
 
-Zygote.@adjoint SparseArrays.SparseMatrixCSC(A::PermMatrix) = SparseMatrixCSC(A), Δ->(Δ, )
+PartialP.@adjoint SparseArrays.SparseMatrixCSC(A::PermMatrix) = SparseMatrixCSC(A), Δ->(Δ, )
 
-Zygote.@adjoint BitBasis.onehot(::Type{T}, nbits::Int, x::Integer, nbatch::Int) where T = onehot(T, nbits, x, nbatch), Δ -> nothing
+PartialP.@adjoint BitBasis.onehot(::Type{T}, nbits::Int, x::Integer, nbatch::Int) where T = onehot(T, nbits, x, nbatch), Δ -> nothing
 
 # upstreams
-Zygote.@adjoint Base.:(-)(a, b) = a-b, Δ -> (Δ, -Δ)
-Zygote.@adjoint Base.:(+)(a, b) = a+b, Δ -> (Δ, Δ)
+PartialP.@adjoint Base.:(-)(a, b) = a-b, Δ -> (Δ, -Δ)
+PartialP.@adjoint Base.:(+)(a, b) = a+b, Δ -> (Δ, Δ)
 
 # require mutate
-Zygote.@adjoint! function copyto!(xs::AbstractVector, ys::Tuple)
+PartialP.@adjoint! function copyto!(xs::AbstractVector, ys::Tuple)
     xs_ = copy(xs)
     copyto!(xs, ys), function (dxs)
         copyto!(xs_, xs)

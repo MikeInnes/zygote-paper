@@ -1,4 +1,4 @@
-using Colors, Zygote
+using Colors, PartialP
 
 target = RGB(1, 0, 0)
 colour = RGB(1, 1, 1)
@@ -15,7 +15,7 @@ for idx in 1:51
     global colour, target
 
     # Calculate gradients
-    grads = Zygote.gradient(colour) do y
+    grads = PartialP.gradient(colour) do y
         colordiff(target, y)
     end
     # Update colour
