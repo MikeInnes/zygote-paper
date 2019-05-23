@@ -1,4 +1,4 @@
-using Zygote, Flux, NNlib
+using Zygote, Flux, NNlib, Random
 using Flux: onehot, chunk, batchseq, crossentropy
 using Base.Iterators: partition
 using StatsBase: wsample
@@ -7,13 +7,15 @@ using StatsBase: wsample
 include("utils.jl")
 include("optimise.jl")
 
-function train_model!(model, Xs, Ys, num_epochs = 10)
-    opt = ADAM(0.01) 
+function train_model!(model, Xs, Ys, num_epochs = 100)
+    opt = ADAM(0.001) 
     avg_loss = 0.0
 
     # Run through our entire dataset a few times 
     for epoch_idx in 1:num_epochs
-        for (batch_idx, (x_batch, y_batch)) in enumerate(zip(Xs, Ys))
+        permutation = shuffle(1:length(Xs))
+        for batch_idx in 1:length(permutation)
+            x_batch, y_batch = Xs[permutation[batch_idx]], Ys[permutation[batch_idx]]
             # Calculate gradients upon the model for this batch of data,
             # summing crossentropy loss across time
             l, back = Zygote.forward(model) do model
@@ -29,6 +31,7 @@ function train_model!(model, Xs, Ys, num_epochs = 10)
             @info(epoch_idx, batch_idx, l, avg_loss)
         end
         @info("Done with epoch $(epoch_idx)!")
+        println(sample(model, alphabet, 300))
     end
 
     return model
@@ -46,9 +49,9 @@ alphabet, Xs, Ys = load_data("shakespeare_input.txt")
 # Define simple LSTM-based model to map from alphabet back on to alphabet,
 # predicting the next letter in a corpus of Shakespeare text.
 model = mapleaves(Flux.data, Chain(
-    LSTM(length(alphabet), 128),
-    LSTM(128, 128),
-    Dense(128, length(alphabet)),
+    LSTM(length(alphabet), 512),
+    LSTM(512, 512),
+    Dense(512, length(alphabet)),
 	softmax,
 ))
 

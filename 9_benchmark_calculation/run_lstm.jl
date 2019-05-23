@@ -1,3 +1,6 @@
+using LinearAlgebra
+BLAS.set_num_threads(1)
+
 using Zygote, Flux, BenchmarkTools, Test, DataFrames, GLM, Statistics, StaticArrays
 using Plots
 
@@ -35,29 +38,41 @@ end
 
 
 batch_sizes = 1:8
+layer_sizes = 1:3
 timings = Dict()
-for num_layers in 1:3,
+for num_layers in layer_sizes,
     seq_len in (4,),
     feature_size in (4,)
 
     timings[(num_layers, seq_len, feature_size, batch_sizes)] = sweep_batchsizes(batch_sizes, num_layers, seq_len, feature_size)
 end
 
+# These gotten via count_ops/count_lstm_ops.jl
+num_ops = Dict(
+    1 => 255,
+    2 => 491,
+    3 => 727,
+    4 => 963,
+)
+
 overhead_estimates = Dict()
+workload_estimates = Dict()
 for k in keys(timings)
     num_layers, seq_len, feature_size, batch_sizes = k
     data = DataFrame(X=batch_sizes, Y=timings[k])
     ols = lm(@formula(Y ~ X), data)
-    overhead_estimates[k] = coeftable(ols).cols[1][1]/(num_layers * seq_len)
+    overhead_estimates[k] = coeftable(ols).cols[1][1]/num_ops[num_layers]
+    workload_estimates[k] = coeftable(ols).cols[1][2]
 end
-@show overhead_estimates
-println("Mean overhead: $(mean(values(overhead_estimates)))ns")
 
 gr()
 ENV["GKSwstype"]="100"
 p = plot()
 for key in sort(collect(keys(timings)))
     num_layers, seq_len, feature_size, batch_sizes = key
-    plot!(p, batch_sizes, timings[key]; title="LSTM Runtime", ylabel="Runtime (ns)", xlabel="Batch Size", label="$(num_layers) layers")
+    plot!(p, batch_sizes, timings[key]; title="LSTM Runtime", ylabel="Absolute Runtime (ns)", xlabel="Batch Size", label="$(num_layers) layers")
+    extrapolate(x) = overhead_estimates[key]*num_ops[num_layers] + workload_estimates[key]*x
+    x_points = [0, batch_sizes...]
+    plot!(p, x_points, extrapolate.(x_points); style=:dashdot, label="$(num_layers) layers extrapolation")
 end
-savefig(p, joinpath(@__DIR__, "lstm_runtime.png"))
+savefig(p, joinpath(@__DIR__, "lstm_runtime.pdf"))
