@@ -1,0 +1,33 @@
+title: "$\\partial P$: A Differentiable Programming System to Bridge Machine Learning and Scientific Computing"
+keywords:
+  - Julia
+  - Differentiable Programming
+  - Automatic Differentiation
+  - Compiler
+authors:
+  - name: Mike Innes
+    orcid: 0000-0003-0788-0242
+    affiliation: 1
+  - name: Alan Edelman
+    affiliation: 2
+  - name: Keno Fischer
+    affiliation: 1
+  - name: Chris Rackauckas
+    affiliation: 2, 3
+  - name: Elliot Saba
+    affiliation: 1
+  - name: Viral B. Shah
+    affiliation: 1
+  - name: Will Tebbutt
+    affiliation: 4
+affiliations:
+  - name: Julia Computing, Inc.
+    index: 1
+  - name: Massachusetts Institute of Technology
+    index: 2
+  - name: University of Maryland, Baltimore
+    index: 3
+  - name: University of Cambridge
+    index: 4
+date: 27 August 2019
+bibliography: ref.bib
