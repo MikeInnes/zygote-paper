@@ -34,11 +34,11 @@ In this demo, the target Hamiltonian is an anti-ferromagnetic model
 
 <img src="hamiltonian.png" width="300"/>
 
-The classical optimizaer `Adam` is from `Flux.jl`, with 200 steps o training, the energy of a 4 site toy model is very close to the exact ground state energy.
+The classical optimizer `Adam` is from `Flux.jl`, with 200 steps of training, the energy of a 4 site toy model is very close to the exact ground state energy.
 
 <img src="loss-history.png" width="500"/>
 
-Quantum simulator [Yao](https://quantumbfs.github.io/Yao.jl/latest/) [6] used here is introduces in another folder `variational_quantum_circuit`.
+Quantum simulator [Yao](https://quantumbfs.github.io/Yao.jl/latest/) [6] used here is introduced in another folder, `variational_quantum_circuit`.
 
 ## Run the script
 
