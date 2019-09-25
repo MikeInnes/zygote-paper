@@ -12,13 +12,16 @@
 \usepackage{amsmath}
 \usepackage{etoolbox}
 % \usepackage{comment}
-\usepackage{minted}
+% \usepackage{minted}
+\usepackage{listings}
 
-\setminted[Julia]{
-    fontfamily=fdm,
-    fontsize=\footnotesize,
-    escapeinside=||,mathescape=true
-    }
+% \setminted[Julia]{
+%     fontfamily=fdm,
+%     fontsize=\footnotesize,
+%     escapeinside=,mathescape=true
+%     }
+
+\lstset{language=Julia,mathescape=true}
 
 \newtoggle{anonymous}
 % \toggletrue{anonymous}
@@ -84,7 +87,7 @@ One feature of our example is that the number of terms will not be fixed, but wi
 
 To run, install Julia v1.1 or higher, and install the Zygote.jl and ForwardDiff.jl packages with:
 
-\begin{minted}{Julia}
+\begin{lstlisting}
 using Pkg
 Pkg.add("Zygote")
 Pkg.add("ForwardDiff")
@@ -104,11 +107,11 @@ function s(x)
     end
     return t 
 end
-\end{minted}
+\end{lstlisting}
 
 While the Taylor series for sine could have been written more compactly in Julia, for purposes of illustrating more complex programs, we purposefully used a loop, a conditional, a print statement, and function calls to \verb+isodd+ and \verb+factorial+, which are native Julia implementations. AD just works, and that is the powerful part of the Julia approach. Let’s compute the gradient at x = 1.0 and check whether it matches \verb+cos(1.0)+:
 
-\begin{minted}{Julia}
+\begin{lstlisting}{Julia}
 julia> # Forward Mode AD
 
 julia> ForwardDiff.derivative(s, 1.0)
@@ -131,7 +134,7 @@ i=11
 
 julia> cos(1.0)
 0.5403023058681398 
-\end{minted}
+\end{lstlisting}
 
     
 \section{Implementation}
@@ -167,17 +170,17 @@ i.e. $\mathcal{J}(f)(x)$ returns the value of $f$ at x, as well as a function wh
 
 \begin{figure}
     \begin{minipage}{0.5\textwidth}
-    \begin{minted}[
+    \begin{lstlisting}[
     framesep=2mm,
     ]{Julia}
-    function |$\mathcal{J}$|(|$f \circ g$|)(x)
-        |$a$|, |$\underline{a}$| = |$\mathcal{J}(f)(x)$|
-        |$b$|, |$\underline{b}$| = |$\mathcal{J}(g)(a)$|
-        |$b$|, |$z$| |$\to$| begin
-            |$\underline{a}$($\underline{b}$(z))|
+    function $\mathcal{J}$($f \circ g$)(x)
+        $a$, $\underline{a}$ = $\mathcal{J}(f)(x)$
+        $b$, $\underline{b}$ = $\mathcal{J}(g)(a)$
+        $b$, $z$ $\to$ begin
+            $\underline{a}$($\underline{b}$(z))
         end
     end
-    \end{minted}
+    \end{lstlisting}
     % \begin{verbatim}
     % function J(f . g)(x)
     %     a, da = J(f)(x)
@@ -189,12 +192,12 @@ i.e. $\mathcal{J}(f)(x)$ returns the value of $f$ at x, as well as a function wh
     \end{minipage}
     \hspace{0.1in}
     \begin{minipage}{0.5\textwidth}
-    \begin{minted}[
+    \begin{lstlisting}[
     framesep=2mm,
     fontsize=\footnotesize,
     fontfamily=fdm,
     xleftmargin=6pt,
-    escapeinside=||,mathescape=true
+    escapeinside=,mathescape=true
     ]{Julia}
     julia> f(x) = x^2 + 3x + 1
     julia> gradient(f, 1/3)
@@ -203,7 +206,7 @@ i.e. $\mathcal{J}(f)(x)$ returns the value of $f$ at x, as well as a function wh
     julia> using Measurements;
     julia> gradient(f, 1/3 +- 0.01)
     (3.6666666666666665 +- 0.02,)
-    \end{minted}
+    \end{lstlisting}
     \caption{With two minimal definitions, \Zygote\ is able to obtain derivatives of any function that only requires those definitions, even through custom data types (such as \textit{Measurement}) and many layers of abstraction.}\label{generalize}
     \end{minipage}
 \end{figure}
@@ -241,7 +244,7 @@ A more extensive code listing for these examples is available at the following U
 The code sample below demonstrates many powerful elements of \Zygote, making use of several convenient Julia features in the process.  First, the defined model has no special data types within it to enable AD; the models are defined for forward-pass calculation only, with backwards-pass definitions only for basic building blocks such as BLAS operations and basic array manipulation. \Zygote\ is used to wrap the loss computation, explicitly denoting the bounds of the computation that should be differentiated to calculate the gradients imposed upon the model, but all other pieces of code (including the LSTM layer definition itself) are written without automatic differentiation in mind. This model executes on the CPU, GPU~\cite{Flux.jl-2018} and Google TPU architecture~\cite{XLA.jl-2018}, with little to no change.
 
 % \begin{verbatim}
-\begin{minted}{Julia}
+\begin{lstlisting}{Julia}
 alphabet, Xs, Ys = load_data("shakespeare_input.txt")
 
 model = Chain(
@@ -259,7 +262,7 @@ for epoch_idx in 1:10,
   # Calculate gradients upon the model for this
   # batch of data, summing crossentropy loss
   # across each time index in this batch.
-  grads = |\Zygoteplain|.gradient(model) do model
+  grads = \Zygoteplain.gradient(model) do model
     return sum(crossentropy.(model.(x_batch), y_batch))
   end
   
@@ -268,7 +271,7 @@ for epoch_idx in 1:10,
   model = update!(opt, model, grads)
   Flux.reset!(model)
 end
-\end{minted}
+\end{lstlisting}
 % \end{verbatim}
 
 \Zygote\ provides an extremely low-overhead AD interface. By performing source-to-source transformation, there is little runtime overhead from the AD transformation, beyond the actual cost of computing the backwards pass\footnote{In practice \Zygote\ may currently generate code that pessimizes certain compiler assumption and thus leads to slower execution. We are working on improving the compiler for these case to achieve true zero overhead.}. In addition, it has been shown to perform at the same level as TensorFlow for ResNet on a TPU pod~\cite{xla.jl}.
@@ -312,7 +315,7 @@ As in other cases, the difficulty lies in getting efficient derivatives from a p
 
 In our examples we have used our prototype renderer~\cite{diffrender} to demonstrate optimization of the position of a point light source, given the desired final rendered image. We define a loss function that accepts a point light source as input, renders the scene, and compares it to a reference image. As usual, gradients are then trivial and we can begin to update the position of the point source.
 
-\begin{minted}{Julia}
+\begin{lstlisting}{Julia}
 guess = PointLight(Vec3(1.0),
                    20000.0,
                    Vec3(1.0, 2.0, -7.0))
@@ -327,7 +330,7 @@ function loss_function(light)
 end
 
 gs = gradient(x -> loss_function(x, image), guess) 
-\end{minted}
+\end{lstlisting}
 
 \begin{figure}[!htb]
 \minipage{0.32\textwidth}
@@ -372,20 +375,20 @@ We use a standard differentiable variational quantum circuit composed of layers 
 
 \begin{figure}
     \begin{minipage}{0.48\textwidth}
-    \begin{minted}{Julia}
+    \begin{lstlisting}{Julia}
     using Yao, Zygote
     const nsites = 4
     let H = heisenberg(nsites),
         v0 = statevec(zero_state(nsites))
         energy(circuit) =
-           (|$\Psi$| = circuit*v0;
-            real(|$\Psi'$| * H * |$\Psi$|))
+           ($\Psi$ = circuit*v0;
+            real($\Psi'$ * H * $\Psi$))
     end
     circuit_init =
         random_diff_circuit(nsites, 2)
     optimize_plot_loss(
         energy, circuit_init, ADAM(0.1))
-    \end{minted}
+    \end{lstlisting}
   \caption{An ADAM optimizer is used to tune parameters of a variational quantum circuit to find the ground state of a 4-site anti-ferromagnetic Heisenberg chain Hamiltonian. The necessary gradients are obtained by automatic differentiation of a Yao.jl quantum simulator.}
 \end{minipage}
 \minipage{0.48\textwidth}
@@ -443,13 +446,13 @@ An emerging direction for computer vision is the notion of  `inverse graphics': 
 As in other cases, the difficulty lies in getting efficient derivatives from a production-ready renderer, typically written in a performance language like C++. We repeat the going themes of this paper: ML framework-based reimplementations are typically limited compared to existing renderers (both by the available framework operations and by the years of work from rendering experts that has gone into production renderers), and workarounds such as Monte Carlo sampling impose a high efficiency cost (around $40\times$ slower than a single render) compared to AD (at most around ~$5\times$ due to division, in principle). The Julia community's approach is to build a renderer suitable for traditional production rendering tasks, using a general and high-performance numerical language, and then differentiate it.
 
 
-\begin{minted}[
+\begin{lstlisting}[
     frame=lines,
     framesep=2mm,
     fontsize=\footnotesize,
     fontfamily=fdm,
     xleftmargin=6pt,
-    escapeinside=||,mathescape=true
+    escapeinside=,mathescape=true
     ]{Julia}
 julia> guess = PointLight(Vec3(1.0), 20000.0, Vec3(1.0, 2.0, -7.0))
 
@@ -461,7 +464,7 @@ julia> function loss_function(light)
        end
 
 julia> gs = gradient(x -> loss_function(x, image), guess)   
-\end{minted}
+\end{lstlisting}
 
 In our examples we have used our prototype renderer to demonstrate optimization of the position of a point light source, given the desired final rendered image. We define a loss function that accepts a point light source as input, renders the scene, and compares it to a reference image. As usual, gradients are then trivial and we can begin to update the position of the point source.
 
